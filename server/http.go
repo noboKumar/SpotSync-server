@@ -1,10 +1,12 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v5"
+	"github.com/labstack/echo/v5/middleware"
 	"gorm.io/gorm"
-	"net/http"
 
 	"github.com/noboKumar/SpotSync-server/config"
 )
@@ -24,6 +26,7 @@ func Start(cfg *config.Config, db *gorm.DB) {
 	e.Validator = &CustomValidator{validator: validator.New()}
 
 	//middleware
+	e.Use(middleware.RequestLogger())
 
 	e.GET("/health", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{
