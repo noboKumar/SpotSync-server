@@ -8,22 +8,21 @@ import (
 )
 
 type Config struct {
-	dsn       string
-	port      string
-	jwtSecret string
+	DSN       string
+	Port      string
+	JwtSecret string
 }
 
-func loadEnv() *Config {
+func LoadEnv() *Config {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println(".env file not found, using system environment variables")
 	}
 
 	return &Config{
-		dsn:       os.Getenv("DSN"),
-		port:      os.Getenv("PORT"),
-		jwtSecret: os.Getenv("JWT_SECRET"),
+		DSN:       os.Getenv("DSN"),
+		Port:      os.Getenv("PORT"),
+		JwtSecret: os.Getenv("JWT_SECRET"),
 	}
-
 }
