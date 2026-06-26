@@ -25,7 +25,6 @@ func Start(cfg *config.Config, db *gorm.DB) {
 
 	//middleware
 
-
 	e.GET("/health", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{
 			"status": "ok",
@@ -35,5 +34,4 @@ func Start(cfg *config.Config, db *gorm.DB) {
 	//routes
 
 	e.Start(":" + cfg.Port)
-
 }
