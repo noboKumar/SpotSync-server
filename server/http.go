@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/noboKumar/SpotSync-server/config"
+	parkingzones "github.com/noboKumar/SpotSync-server/domain/parking_zones"
 	"github.com/noboKumar/SpotSync-server/domain/users"
 )
 
@@ -21,7 +22,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 }
 
 func Start(cfg *config.Config, db *gorm.DB) {
-	db.AutoMigrate(&users.User{})
+	db.AutoMigrate(&users.User{}, &parkingzones.ParkingZone{})
 
 	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New()}
@@ -37,6 +38,7 @@ func Start(cfg *config.Config, db *gorm.DB) {
 
 	//routes
 	users.RegisterRoutes(e, db, cfg)
+	parkingzones.RegisterRoutes(e, db)
 
 	e.Start(":" + cfg.Port)
 }
