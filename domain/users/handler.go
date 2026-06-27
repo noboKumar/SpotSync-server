@@ -46,7 +46,11 @@ func (h *handler) CreateUser(c *echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, response)
+	return c.JSON(http.StatusOK, dto.SuccessResponse{
+		Success: true,
+		Message: "User created successfully",
+		Data:    response,
+	})
 }
 
 func (h *handler) LoginUser(c *echo.Context) error {
