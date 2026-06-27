@@ -10,6 +10,9 @@ type Repository interface {
 
 	// create a new user in the database
 	CreateUser(user *User) error
+
+	// get a user by email from the database
+	GetUserByEmail(email string) (*User, error)
 }
 
 // repository is a concrete implementation of the Repository interface
@@ -34,4 +37,16 @@ func (r *repository) CreateUser(user *User) error {
 		return result.Error
 	}
 	return nil
+}
+
+func (r *repository) GetUserByEmail(email string) (*User, error) {
+	var user User
+	err := r.db.Where("email = ?", email).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
 }

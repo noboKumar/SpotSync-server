@@ -18,7 +18,7 @@ func NewService(repo Repository, jwtService auth.JwtService) *service {
 	return &service{repo: repo, jwtService: jwtService}
 }
 
-func (s *service) CreateUser(req dto.CreateRequest) (*dto.Response, error) {
+func (s *service) CreateUser(req dto.CreateRequest) (*dto.RegisterResponse, error) {
 	// Create a new user entity from the request data
 	user := User{
 		Name:  req.Name,
@@ -40,13 +40,38 @@ func (s *service) CreateUser(req dto.CreateRequest) (*dto.Response, error) {
 		return nil, err
 	}
 
-	return &dto.Response{
+	return &dto.RegisterResponse{
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
-		Password:  user.Password,
 		Role:      user.Role,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
+	}, nil
+}
+
+func (s *service) LoginUser(req dto.LoginRequest) (*dto.LoginResponse, error) {
+	user, err := s.repo.GetUserByEmail(req.Email)
+	if err != nil {
+		return nil, ErrInvalidCredentials
+	}
+
+	if err := user.CheckPassword(req.Password); err != nil {
+		return nil, ErrInvalidCredentials
+	}
+
+	accessToken, err := s.jwtService.GenerateAccessToken(user.ID, user.Role, user.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.LoginResponse{
+		Token: accessToken,
+		User: dto.UserResponse{
+			ID:    user.ID,
+			Name:  user.Name,
+			Email: user.Email,
+			Role:  user.Role,
+		},
 	}, nil
 }
