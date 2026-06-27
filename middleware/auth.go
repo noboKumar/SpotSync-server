@@ -5,10 +5,10 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v5"
-	"github.com/noboKumar/SpotSync-server/utils"
+	"github.com/noboKumar/SpotSync-server/auth"
 )
 
-func AuthMiddleware(jwtService utils.JwtService) echo.MiddlewareFunc {
+func AuthMiddleware(jwtService auth.JwtService) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c *echo.Context) error {
 			authHeader := c.Request().Header.Get("Authorization")
@@ -33,7 +33,7 @@ func AuthMiddleware(jwtService utils.JwtService) echo.MiddlewareFunc {
 			}
 
 			// reject refresh tokens from being used as access tokens
-			if claims.TokenType != utils.TokenTypeAccess {
+			if claims.TokenType != auth.TokenTypeAccess {
 				return c.JSON(http.StatusUnauthorized, map[string]string{
 					"error": "invalid token type",
 				})

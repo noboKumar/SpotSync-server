@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/noboKumar/SpotSync-server/config"
+	"github.com/noboKumar/SpotSync-server/domain/users"
 )
 
 type CustomValidator struct {
@@ -20,7 +21,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 }
 
 func Start(cfg *config.Config, db *gorm.DB) {
-	db.AutoMigrate()
+	db.AutoMigrate(&users.User{})
 
 	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New()}
@@ -35,6 +36,7 @@ func Start(cfg *config.Config, db *gorm.DB) {
 	})
 
 	//routes
+	users.RegisterRoutes(e, db, cfg)
 
 	e.Start(":" + cfg.Port)
 }

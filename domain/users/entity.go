@@ -9,13 +9,13 @@ import (
 
 type User struct {
 	gorm.Model
-	id        uint      `gorm:"primaryKey"`
-	name      string    `gorm:"not null"`
-	email     string    `gorm:"unique;not null"`
-	password  string    `gorm:"not null"`
-	role      string    `gorm:"type:varchar(20);default:driver;not null"`
-	createdAt time.Time `gorm:"autoCreateTime"`
-	updatedAt time.Time `gorm:"autoUpdateTime"`
+	ID        uint      `gorm:"primaryKey"`
+	Name      string    `gorm:"not null"`
+	Email     string    `gorm:"unique;not null"`
+	Password  string    `gorm:"not null"`
+	Role      string    `gorm:"type:varchar(20);default:driver"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 }
 
 func (u *User) SetPassword(password string) error {
@@ -23,11 +23,11 @@ func (u *User) SetPassword(password string) error {
 	if err != nil {
 		return err
 	}
-	u.password = string(hashedPassword)
+	u.Password = string(hashedPassword)
 	return nil
 }
 
 func (u *User) CheckPassword(password string) error {
-	err := bcrypt.CompareHashAndPassword([]byte(u.password), []byte(password))
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 	return err
 }
