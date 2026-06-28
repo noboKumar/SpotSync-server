@@ -2,6 +2,7 @@ package reservations
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v5"
 	"github.com/noboKumar/SpotSync-server/domain/reservations/dto"
@@ -83,5 +84,40 @@ func (h *handler) GetMyReservation(c *echo.Context) error {
 		Success: true,
 		Message: "Reservations retrieved successfully",
 		Data:    reservations,
+	})
+}
+
+func (h *handler) CancelReservation(c *echo.Context) error {
+	reservationID := c.Param("id")
+
+	userID, ok := c.Get("user_id").(uint)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, map[string]any{
+			"success": false,
+			"message": "Unauthorized",
+		})
+	}
+
+	id, err := strconv.ParseUint(reservationID, 10, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.Error{
+			Code:    http.StatusBadRequest,
+			Message: "Invalid reservation ID",
+			Details: err.Error(),
+		})
+	}
+
+	err = h.service.repo.CancelReservation(uint(id), userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Error{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to cancel reservation",
+			Details: err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, dto.SuccessResponse{
+		Success: true,
+		Message: "Reservation cancelled successfully",
 	})
 }

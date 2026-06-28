@@ -72,3 +72,12 @@ func (s *service) GetMyReservation(userID uint) ([]dto.MyReservationResponse, er
 
 	return res, nil
 }
+
+func (s *service) CancelReservation(reservationID uint, userID uint) (dto.DeleteResponse, error) {
+	err := s.repo.CancelReservation(reservationID, userID)
+	if err != nil {
+		return dto.DeleteResponse{Success: false, Message: "Failed to cancel reservation"}, err
+	}
+	return dto.DeleteResponse{Success: true, Message: "Reservation cancelled successfully"}, nil
+
+}

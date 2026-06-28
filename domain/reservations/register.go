@@ -20,5 +20,8 @@ func RegisterRoutes(e *echo.Echo, db *gorm.DB, cfg *config.Config) {
 	api := e.Group("/api/v1")
 
 	api.POST("/reservations", reservationHandler.ReserveParkingZone, middleware.AuthMiddleware(jwtService))
+
 	api.GET("/reservations/my-reservations", reservationHandler.GetMyReservation, middleware.AuthMiddleware(jwtService))
+
+	api.DELETE("/reservations/:id", reservationHandler.CancelReservation, middleware.AuthMiddleware(jwtService))
 }

@@ -7,6 +7,7 @@ type Repository interface {
 		reservation *Reservation,
 	) error
 	GetMyReservation(userID uint) ([]Reservation, error)
+	CancelReservation(reservationID uint, userID uint) error
 }
 
 type repository struct {
@@ -43,4 +44,21 @@ func (r *repository) GetMyReservation(userID uint) ([]Reservation, error) {
 	}
 
 	return reservations, nil
+}
+
+func (r *repository) CancelReservation(reservationID uint, userID uint) error {
+	result := r.db.
+		Model(&Reservation{}).
+		Where("id = ? AND user_id = ?", reservationID, userID).
+		Update("status", "cancelled")
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
 }
