@@ -35,7 +35,14 @@ func (h *handler) ReserveParkingZone(c *echo.Context) error {
 		})
 	}
 
-	userID := c.Get("userID").(uint)
+	userID, ok := c.Get("user_id").(uint)
+	if !ok {
+		return c.JSON(401, map[string]any{
+			"success": false,
+			"message": "Unauthorized",
+		})
+	}
+
 	req.UserID = userID
 
 	res, err := h.service.ReserveParkingZone(req)
