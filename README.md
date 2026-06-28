@@ -4,7 +4,7 @@ Smart Parking & EV Charging Reservation System built with Go, Echo, GORM, Postgr
 
 ## 🌍 Live Demo
 
-* **Backend API:** https://your-deployment-url.com
+* **Backend API:** https://spotsync-server-285t.onrender.com
 ---
 
 ## 📌 Project Overview

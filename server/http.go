@@ -31,6 +31,13 @@ func Start(cfg *config.Config, db *gorm.DB) {
 	//middleware
 	e.Use(middleware.RequestLogger())
 
+	e.GET("/", func(c *echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]any{
+			"success": true,
+			"message": "SpotSync API is running...",
+		})
+	})
+
 	e.GET("/health", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{
 			"status": "ok",
