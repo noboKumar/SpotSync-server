@@ -1,6 +1,8 @@
 package reservations
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Repository interface {
 	ReserveParkingZone(
@@ -8,6 +10,7 @@ type Repository interface {
 	) error
 	GetMyReservation(userID uint) ([]Reservation, error)
 	CancelReservation(reservationID uint, userID uint) error
+	GetAllReservations(reservations *[]Reservation) error
 }
 
 type repository struct {
@@ -60,5 +63,14 @@ func (r *repository) CancelReservation(reservationID uint, userID uint) error {
 		return gorm.ErrRecordNotFound
 	}
 
+	return nil
+}
+
+func (r *repository) GetAllReservations(reservations *[]Reservation) error {
+
+	result := r.db.Preload("Zone").Preload("User").Find(&reservations)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }

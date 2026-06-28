@@ -26,6 +26,23 @@ type MyReservationResponse struct {
 	CreatedAt    time.Time    `json:"created_at"`
 }
 
+type GetAllReservationsResponse struct {
+	ID           uint         `json:"id"`
+	UserID       uint         `json:"user_id"`
+	LicensePlate string       `json:"license_plate"`
+	Status       string       `json:"status"`
+	User         UserResponse `json:"user"`
+	Zone         ZoneResponse `json:"zone"`
+	CreatedAt    time.Time    `json:"created_at"`
+}
+
+type UserResponse struct {
+	ID    uint   `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Role  string `json:"role"`
+}
+
 type DeleteResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`

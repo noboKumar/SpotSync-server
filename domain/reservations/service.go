@@ -79,5 +79,40 @@ func (s *service) CancelReservation(reservationID uint, userID uint) (dto.Delete
 		return dto.DeleteResponse{Success: false, Message: "Failed to cancel reservation"}, err
 	}
 	return dto.DeleteResponse{Success: true, Message: "Reservation cancelled successfully"}, nil
+}
 
+func (s *service) GetAllReservations() ([]dto.GetAllReservationsResponse, error) {
+
+	var reservations []Reservation
+	err := s.repo.GetAllReservations(&reservations)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var res []dto.GetAllReservationsResponse
+	for _, r := range reservations {
+		res = append(res, dto.GetAllReservationsResponse{
+			ID:           r.ID,
+			UserID:       r.UserID,
+			LicensePlate: r.LicensePlate,
+			Status:       r.Status,
+			
+			User: dto.UserResponse{
+				ID:    r.User.ID,
+				Name:  r.User.Name,
+				Email: r.User.Email,
+				Role:  r.User.Role,
+			},
+
+			Zone: dto.ZoneResponse{
+				ID:   r.Zone.ID,
+				Name: r.Zone.Name,
+				Type: r.Zone.Type,
+			},
+			CreatedAt: r.CreatedAt,
+		})
+	}
+
+	return res, nil
 }

@@ -24,4 +24,9 @@ func RegisterRoutes(e *echo.Echo, db *gorm.DB, cfg *config.Config) {
 	api.GET("/reservations/my-reservations", reservationHandler.GetMyReservation, middleware.AuthMiddleware(jwtService))
 
 	api.DELETE("/reservations/:id", reservationHandler.CancelReservation, middleware.AuthMiddleware(jwtService))
+
+	api.GET("/reservations",
+		reservationHandler.GetAllReservations,
+		middleware.AuthMiddleware(jwtService),
+		middleware.AdminMiddleware)
 }

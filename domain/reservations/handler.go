@@ -121,3 +121,22 @@ func (h *handler) CancelReservation(c *echo.Context) error {
 		Message: "Reservation cancelled successfully",
 	})
 }
+
+func (h *handler) GetAllReservations(c *echo.Context) error {
+	reservations, err := h.service.GetAllReservations()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Error{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to retrieve reservations",
+			Details: err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, dto.SuccessResponse{
+		Success: true,
+		Message: "Reservations retrieved successfully",
+		Data:    reservations,
+	})
+
+}
