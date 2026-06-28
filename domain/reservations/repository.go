@@ -3,7 +3,9 @@ package reservations
 import "gorm.io/gorm"
 
 type Repository interface {
-	ReserveParkingZone(reservation *Reservation) error
+	ReserveParkingZone(
+		reservation *Reservation,
+	) error
 }
 
 type repository struct {
@@ -14,11 +16,15 @@ func NewReservationRepository(db *gorm.DB) Repository {
 	return &repository{db: db}
 }
 
-func (r *repository) ReserveParkingZone(reservation *Reservation) error {
+func (r *repository) ReserveParkingZone(
+	reservation *Reservation,
+) error {
+
 	result := r.db.Create(reservation)
 
 	if result.Error != nil {
 		return result.Error
 	}
+
 	return nil
 }

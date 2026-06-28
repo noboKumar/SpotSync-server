@@ -1,6 +1,12 @@
 package reservations
 
-import "github.com/noboKumar/SpotSync-server/domain/reservations/dto"
+import (
+	"errors"
+
+	"github.com/noboKumar/SpotSync-server/domain/reservations/dto"
+)
+
+var ErrZoneFull = errors.New("parking zone is full")
 
 type service struct {
 	repo Repository
@@ -10,15 +16,23 @@ func NewService(repo Repository) *service {
 	return &service{repo: repo}
 }
 
-func (s *service) ReserveParkingZone(req dto.ReserveParkingZoneReq) (dto.ReserveParkingZoneRes, error) {
+func (s *service) ReserveParkingZone(
+	req dto.ReserveParkingZoneReq,
+	userID uint,
+) (dto.ReserveParkingZoneRes, error) {
+
 	reservation := Reservation{
 		ZoneID:       req.ZoneId,
 		LicensePlate: req.LicensePlate,
 		Status:       "active",
-		UserID:       req.UserID,
+		UserID:       userID,
 	}
 
 	err := s.repo.ReserveParkingZone(&reservation)
+
+	if errors.Is(err, ErrZoneFull) {
+		return dto.ReserveParkingZoneRes{}, ErrZoneFull
+	}
 
 	if err != nil {
 		return dto.ReserveParkingZoneRes{}, err

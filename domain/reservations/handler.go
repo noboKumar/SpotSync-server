@@ -45,7 +45,7 @@ func (h *handler) ReserveParkingZone(c *echo.Context) error {
 
 	req.UserID = userID
 
-	res, err := h.service.ReserveParkingZone(req)
+	res, err := h.service.ReserveParkingZone(req, userID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.Error{
 			Code:    http.StatusInternalServerError,
