@@ -60,3 +60,28 @@ func (h *handler) ReserveParkingZone(c *echo.Context) error {
 		Data:    res,
 	})
 }
+
+func (h *handler) GetMyReservation(c *echo.Context) error {
+	userID, ok := c.Get("user_id").(uint)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, map[string]any{
+			"success": false,
+			"message": "Unauthorized",
+		})
+	}
+
+	reservations, err := h.service.GetMyReservation(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.Error{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to retrieve reservations",
+			Details: err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, dto.SuccessResponse{
+		Success: true,
+		Message: "Reservations retrieved successfully",
+		Data:    reservations,
+	})
+}

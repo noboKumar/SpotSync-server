@@ -12,6 +12,20 @@ type ReserveParkingZoneRes struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
+type ZoneResponse struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
+type MyReservationResponse struct {
+	ID           uint         `json:"id"`
+	LicensePlate string       `json:"license_plate"`
+	Status       string       `json:"status"`
+	Zone          ZoneResponse `json:"zone"`
+	CreatedAt    time.Time    `json:"created_at"`
+}
+
 type SuccessResponse struct {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`

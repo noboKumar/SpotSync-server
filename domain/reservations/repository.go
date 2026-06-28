@@ -6,6 +6,7 @@ type Repository interface {
 	ReserveParkingZone(
 		reservation *Reservation,
 	) error
+	GetMyReservation(userID uint) ([]Reservation, error)
 }
 
 type repository struct {
@@ -27,4 +28,19 @@ func (r *repository) ReserveParkingZone(
 	}
 
 	return nil
+}
+
+func (r *repository) GetMyReservation(userID uint) ([]Reservation, error) {
+	var reservations []Reservation
+
+	result := r.db.
+		Preload("Zone").
+		Where("user_id = ?", userID).
+		Find(&reservations)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return reservations, nil
 }

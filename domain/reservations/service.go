@@ -48,3 +48,27 @@ func (s *service) ReserveParkingZone(
 		UpdatedAt:    reservation.UpdatedAt,
 	}, nil
 }
+
+func (s *service) GetMyReservation(userID uint) ([]dto.MyReservationResponse, error) {
+	reservations, err := s.repo.GetMyReservation(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	var res []dto.MyReservationResponse
+	for _, r := range reservations {
+		res = append(res, dto.MyReservationResponse{
+			ID:           r.ID,
+			LicensePlate: r.LicensePlate,
+			Status:       r.Status,
+			Zone: dto.ZoneResponse{
+				ID:   r.Zone.ID,
+				Name: r.Zone.Name,
+				Type: r.Zone.Type,
+			},
+			CreatedAt: r.CreatedAt,
+		})
+	}
+
+	return res, nil
+}
