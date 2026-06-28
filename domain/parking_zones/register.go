@@ -23,4 +23,7 @@ func RegisterRoutes(e *echo.Echo, db *gorm.DB, cfg *config.Config) {
 		middleware.AuthMiddleware(jwtService),
 		middleware.AdminMiddleware,
 	)
+
+	// Register the route for getting all parking zones
+	api.GET("/zones", parkingZoneHandler.GetAllParkingZone)
 }

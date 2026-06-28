@@ -2,7 +2,7 @@ package dto
 
 import "time"
 
-type CreateParkingZoneResponse struct {
+type ParkingZoneResponse struct {
 	ID             uint      `json:"id"`
 	Name           string    `json:"name"`
 	Type           string    `json:"type"`

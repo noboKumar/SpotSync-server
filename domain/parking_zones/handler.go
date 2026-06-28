@@ -47,3 +47,23 @@ func (h *handler) CreateParkingZone(c *echo.Context) error {
 		Data:    response,
 	})
 }
+
+func (h *handler) GetAllParkingZone(c *echo.Context) error {
+	parkingZone := []ParkingZone{}
+	err := h.service.repo.GetAllParkingZone(&parkingZone)
+	
+	if err != nil {
+		return c.JSON(500, map[string]any{
+			"success": false,
+			"message": "Internal server error",
+			"details": err.Error(),
+		})
+	}
+	
+	return c.JSON(http.StatusOK, dto.SuccessResponse{
+		Success: true,
+		Message: "Parking zones retrieved successfully",
+		Data:    parkingZone,
+	})
+
+}

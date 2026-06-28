@@ -10,7 +10,7 @@ func NewService(repo Repository) *service {
 	return &service{repo: repo}
 }
 
-func (s *service) CreateParkingZone(req dto.CreateParkingZoneRequest) (*dto.CreateParkingZoneResponse, error) {
+func (s *service) CreateParkingZone(req dto.CreateParkingZoneRequest) (*dto.ParkingZoneResponse, error) {
 	parkingZone := ParkingZone{
 		Name:           req.Name,
 		Type:           req.Type,
@@ -23,7 +23,7 @@ func (s *service) CreateParkingZone(req dto.CreateParkingZoneRequest) (*dto.Crea
 		return nil, err
 	}
 
-	return &dto.CreateParkingZoneResponse{
+	return &dto.ParkingZoneResponse{
 		ID:             parkingZone.ID,
 		Name:           parkingZone.Name,
 		Type:           parkingZone.Type,

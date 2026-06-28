@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type Repository interface {
 	CreateParkingZone(parkingZone *ParkingZone) error
+	GetAllParkingZone(parkingZones *[]ParkingZone) error
 }
 
 type repository struct {
@@ -18,3 +19,6 @@ func (r *repository) CreateParkingZone(parkingZone *ParkingZone) error {
 	return r.db.Create(parkingZone).Error
 }
 
+func (r *repository) GetAllParkingZone(parkingZone *[]ParkingZone) error {
+	return r.db.Find(parkingZone).Error
+}
