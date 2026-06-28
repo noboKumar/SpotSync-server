@@ -17,7 +17,7 @@ type Reservation struct {
 	Zone   parkingzones.ParkingZone `gorm:"foreignKey:ZoneID"`
 
 	LicensePlate string `gorm:"type:varchar(15) not null"`
-	SStatus      string `gorm:"type:varchar(20);default:'active';check:status IN ('active','completed','cancelled')"`
+	Status      string `gorm:"type:varchar(20);default:'active';check:status IN ('active','completed','cancelled')"`
 
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`

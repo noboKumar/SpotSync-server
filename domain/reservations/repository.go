@@ -3,8 +3,7 @@ package reservations
 import "gorm.io/gorm"
 
 type Repository interface {
-	// reserve parking zone
-
+	ReserveParkingZone(reservation *Reservation) error
 }
 
 type repository struct {
