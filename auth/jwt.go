@@ -26,8 +26,8 @@ type JwtClaims struct {
 }
 
 type JwtService interface {
-	GenerateAccessToken(userId uint, name, email string) (string, error)
-	GenerateRefreshToken(userId uint, name, email string) (string, error)
+	GenerateAccessToken(userId uint, name, email string, role string) (string, error)
+	GenerateRefreshToken(userId uint, name, email string, role string) (string, error)
 	ValidateToken(tokenString string) (*JwtClaims, error)
 }
 
@@ -42,11 +42,12 @@ func NewJwtService(secretKey string) JwtService {
 	return &jwtService{secretKey: secretKey}
 }
 
-func (j *jwtService) GenerateAccessToken(userId uint, name, email string) (string, error) {
+func (j *jwtService) GenerateAccessToken(userId uint, name string, email string, role string) (string, error) {
 	claims := &JwtClaims{
 		UserId:    userId,
 		Name:      name,
 		Email:     email,
+		Role:      role,
 		TokenType: TokenTypeAccess,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(accessTokenExpiry)),
@@ -59,11 +60,12 @@ func (j *jwtService) GenerateAccessToken(userId uint, name, email string) (strin
 	return token.SignedString([]byte(j.secretKey))
 }
 
-func (j *jwtService) GenerateRefreshToken(userId uint, name, email string) (string, error) {
+func (j *jwtService) GenerateRefreshToken(userId uint, name, role string, email string) (string, error) {
 	claims := &JwtClaims{
 		UserId:    userId,
 		Name:      name,
 		Email:     email,
+		Role:      role,
 		TokenType: TokenTypeRefresh,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(refreshTokenExpiry)),

@@ -19,6 +19,11 @@ func NewService(repo Repository, jwtService auth.JwtService) *service {
 }
 
 func (s *service) CreateUser(req dto.CreateRequest) (*dto.RegisterResponse, error) {
+
+	// Set the role for the user; default to "driver" if not provided
+	if req.Role == "" {
+		req.Role = "driver"
+	}
 	// Create a new user entity from the request data
 	user := User{
 		Name:  req.Name,
@@ -29,11 +34,6 @@ func (s *service) CreateUser(req dto.CreateRequest) (*dto.RegisterResponse, erro
 	// Set the password for the user (this will hash the password)
 	if err := user.SetPassword(req.Password); err != nil {
 		return nil, err
-	}
-
-	// Set the role for the user; default to "driver" if not provided
-	if req.Role == "" {
-		req.Role = "driver"
 	}
 
 	if err := s.repo.CreateUser(&user); err != nil {
@@ -60,7 +60,7 @@ func (s *service) LoginUser(req dto.LoginRequest) (*dto.LoginResponse, error) {
 		return nil, ErrInvalidCredentials
 	}
 
-	accessToken, err := s.jwtService.GenerateAccessToken(user.ID, user.Role, user.Email)
+	accessToken, err := s.jwtService.GenerateAccessToken(user.ID, user.Name, user.Email, user.Role)
 	if err != nil {
 		return nil, err
 	}

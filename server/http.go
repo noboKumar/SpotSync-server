@@ -38,7 +38,7 @@ func Start(cfg *config.Config, db *gorm.DB) {
 
 	//routes
 	users.RegisterRoutes(e, db, cfg)
-	parkingzones.RegisterRoutes(e, db)
+	parkingzones.RegisterRoutes(e, db, cfg)
 
 	e.Start(":" + cfg.Port)
 }
