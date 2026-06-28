@@ -56,9 +56,9 @@ The project implements Clean Architecture principles and uses database transacti
 
 ---
 
-## 🏗 Clean Architecture
+## 🏗 Domain Driven Design
 
-The project follows Clean Architecture principles:
+The project follows Domain Driven Design principles:
 
 ```text
 SpotSync-server/
@@ -176,25 +176,10 @@ tx.Clauses(
 Create a `.env` file:
 
 ```env
-APP_PORT=8080
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=spotsync
-DB_SSLMODE=disable
-
+DSN=dataBase_connection
+PORT=8080
 JWT_SECRET=your-super-secret-key
 ```
-
-If using a cloud database:
-
-```env
-DATABASE_URL=postgres://user:password@host/database
-JWT_SECRET=your-super-secret-key
-```
-
 ---
 
 ## 🚀 Running Locally
@@ -202,9 +187,9 @@ JWT_SECRET=your-super-secret-key
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/spotsync-api.git
+git clone https://github.com/noboKumar/SpotSync-server.git
 
-cd spotsync-api
+cd SpotSync-server
 ```
 
 ### 2. Install Dependencies
@@ -216,23 +201,10 @@ go mod tidy
 ### 3. Create Environment Variables
 
 ```bash
-cp .env.example .env
+cp .env
 ```
 
 Update the values inside `.env`.
-
-### 4. Start PostgreSQL
-
-Using Docker:
-
-```bash
-docker run --name postgres \
--p 5432:5432 \
--e POSTGRES_USER=postgres \
--e POSTGRES_PASSWORD=postgres \
--e POSTGRES_DB=spotsync \
--d postgres:17
-```
 
 ### 5. Run the Application
 
@@ -318,15 +290,6 @@ Example:
 ```bash
 curl http://localhost:8080/api/v1/zones
 ```
-
----
-
-## 👨‍💻 Author
-
-**Nobo Kumar**
-
-* GitHub: https://github.com/yourusername
-* LinkedIn: https://linkedin.com/in/your-profile
 
 ---
 
