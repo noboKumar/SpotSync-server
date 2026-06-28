@@ -33,3 +33,20 @@ func (s *service) CreateParkingZone(req dto.CreateParkingZoneRequest) (*dto.Park
 		UpdatedAt:      parkingZone.UpdatedAt,
 	}, nil
 }
+
+func (s *service) GetSingleParkingZone(id string) (*dto.ParkingZoneResponse, error) {
+	parkingZone, err := s.repo.GetSingleParkingZone(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.ParkingZoneResponse{
+		ID:             parkingZone.ID,
+		Name:           parkingZone.Name,
+		Type:           parkingZone.Type,
+		Total_Capacity: parkingZone.Total_Capacity,
+		Price_per_Hour: parkingZone.Price_per_Hour,
+		CreatedAt:      parkingZone.CreatedAt,
+		UpdatedAt:      parkingZone.UpdatedAt,
+	}, nil
+}

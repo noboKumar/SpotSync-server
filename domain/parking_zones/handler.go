@@ -67,3 +67,20 @@ func (h *handler) GetAllParkingZone(c *echo.Context) error {
 	})
 
 }
+
+func (h *handler) GetSingleParkingZone(c *echo.Context) error {
+	id := c.Param("id")
+	parkingZone, err := h.service.GetSingleParkingZone(id)
+	if err != nil {
+		return c.JSON(http.StatusNotFound, map[string]any{
+			"success": false,
+			"message": "Parking zone not found",
+			"details": err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, dto.SuccessResponse{
+		Success: true,
+		Message: "Parking zone retrieved successfully",
+		Data:    parkingZone,
+	})
+}

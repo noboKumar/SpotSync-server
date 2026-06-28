@@ -26,4 +26,6 @@ func RegisterRoutes(e *echo.Echo, db *gorm.DB, cfg *config.Config) {
 
 	// Register the route for getting all parking zones
 	api.GET("/zones", parkingZoneHandler.GetAllParkingZone)
+
+	api.GET("/zones/:id", parkingZoneHandler.GetSingleParkingZone)
 }
